@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: crep-job
+  namespace: default
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: crep
+          image: ghcr.io/mitrabeast/crep:latest
+          env:
+            - name: REG_ADDR
+              value: "localhost:5000"
+            - name: REG_USER
+              value: ""
+            - name: REG_PASS
+              value: ""
+            - name: IMG_NAME
+              value: "hello-python"
+            - name: IMG_TAG
+              value: "latest"
