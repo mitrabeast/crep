@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: crep-job
-  namespace: default
+  namespace: kubiya
 spec:
   backoffLimit: 0
   template:
@@ -12,13 +12,25 @@ spec:
         - name: crep
           image: ghcr.io/mitrabeast/crep:latest
           env:
+            - name: _EXPERIMENTAL_DAGGER_RUNNER_HOST
+              value: tcp://dagger-engine-service:8080
             - name: REG_ADDR
-              value: "localhost:5000"
+              value: ""
             - name: REG_USER
               value: ""
             - name: REG_PASS
               value: ""
             - name: IMG_NAME
-              value: "hello-python"
+              value: ""
             - name: IMG_TAG
-              value: "latest"
+              value: "v5.0"
+            - name: USE_DAGGER
+              value: "false"
+          volumeMounts:
+              - name: docker-sock
+                mountPath: /var/run/docker.sock
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
